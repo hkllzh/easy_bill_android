@@ -3,6 +3,7 @@ package com.hkllzh.easybill
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
@@ -12,10 +13,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         btnNoActionVersion.setOnClickListener {
-            toast("进入无 Action Bar 的版本")
+
         }
 
-
-
+        btnNoActionVersion.onClick { toast("进入无 Action Bar 的版本") }
     }
 }
