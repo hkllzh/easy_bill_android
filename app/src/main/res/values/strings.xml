@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">EasyBill</string>
+    <string name="easy_bill">Easy Bill</string>
+    <string name="btn_text_no_action_bar_version">无 Action Bar 版本</string>
+    <string name="btn_text_have_action_bar_version">有 Action Bar 版本</string>
 </resources>
