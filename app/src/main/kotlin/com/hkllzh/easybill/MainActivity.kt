@@ -6,6 +6,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.toast
 
+/**
+ * 主页
+ *
+ * @author lizheng on 2017/11/29
+ */
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,29 +22,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnHaveActionVersion.setOnClickListener {
-            //            alert {
-//                title = "title"
-//                message = "msg"
-////                yesButton {
-////                    title = "yes"
-////                }
-////                noButton {
-////                    title = "d"
-////                }
-//                onCancelled {
-//                    toast("onCancelled")
-//                }
-//                yesButton {
-//
-//                }
-//            }.show()
-
-
-//            alert("Order", "Do you want to order this item?") {
-//                positiveButton("Yes") { toast("yes") }
-//                negativeButton("No") { toast("no") }
-//            }.show()
-
             alert {
                 title = "title"
                 message = "msg"
@@ -47,7 +29,6 @@ class MainActivity : AppCompatActivity() {
                 negativeButton("negativeButton") { toast("negativeButton") }
 //                neutralPressed("negativeButton") { toast("negativeButton") }
             }.show()
-
         }
     }
 }

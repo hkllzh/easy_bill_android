@@ -33,6 +33,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation "com.android.support:appcompat-v7:26.1.0"
     implementation "com.android.support.constraint:constraint-layout:1.0.2"
+    // anko的所有全部引入
     // implementation "org.jetbrains.anko:anko:$anko_version"
     // Anko Commons
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
@@ -42,4 +43,27 @@ dependencies {
     testImplementation "junit:junit:4.12"
     androidTestImplementation "com.android.support.test:runner:1.0.1"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:3.0.1"
+
+    // 图片加载 之 Fresco
+    implementation "com.facebook.fresco:fresco:${FRESCO_VERSION}"
+    implementation("com.facebook.fresco:imagepipeline-okhttp3:${FRESCO_VERSION}") {
+        exclude group: 'com.squareup.okhttp3'
+    }
+
+    // 时间日期处理
+    implementation "joda-time:joda-time:${JODA_TIME_VERSION}"
+
+    // 网络请求
+    implementation "com.squareup.okhttp3:okhttp:${OKHTTP_VERSION}"
+    implementation "com.squareup.okhttp3:logging-interceptor:${OKHTTP_LOGGINGINTERCEPTOR_VERSION}"
+    implementation "com.squareup.retrofit2:retrofit:${RETROFIT_VERSION}"
+    implementation "com.squareup.retrofit2:converter-gson:${RETROFIT_CONVERTER_GSON_VERSION}"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${RETROFIT_ADAPTER_RXJAVA2_VERSION}"
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:${RETROFIT_OKHTTP_URLCONNECTION_VERSION}"
+
+    // json 数据解析 Gson
+    implementation "com.google.code.gson:gson:${GSON_VERSION}"
+
+    implementation "io.reactivex.rxjava2:rxjava:${RXJAVA2_VERSION}"
+
 }
