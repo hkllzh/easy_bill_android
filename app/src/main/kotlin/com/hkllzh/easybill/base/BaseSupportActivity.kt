@@ -14,7 +14,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator
  *
  * @author lizheng on 2017/11/30
  */
-class EasyBillBaseActivity : AppCompatActivity(), ISupportActivity {
+open class BaseSupportActivity : AppCompatActivity(), ISupportActivity {
     private val mDelegate = SupportActivityDelegate(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {

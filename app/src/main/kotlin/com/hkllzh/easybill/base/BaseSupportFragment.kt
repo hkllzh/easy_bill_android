@@ -12,11 +12,11 @@ import me.yokeyword.fragmentation.SupportHelper
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 
 /**
- * page
+ * 项目的 Fragment 基类
  *
  * @author lizheng on 2017/11/30
  */
-class EasyBillBaseFragment : Fragment(), ISupportFragment {
+open class BaseSupportFragment : Fragment(), ISupportFragment {
     private val mDelegate = SupportFragmentDelegate(this)
 
     override fun getSupportDelegate(): SupportFragmentDelegate {

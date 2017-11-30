@@ -3,4 +3,8 @@
     <string name="easy_bill">Easy Bill</string>
     <string name="btn_text_no_action_bar_version">无 Action Bar 版本</string>
     <string name="btn_text_have_action_bar_version">有 Action Bar 版本</string>
+    <string name="et_text_username">用户名</string>
+    <string name="et_text_password">密码</string>
+    <string name="btn_text_login">登录</string>
+    <string name="tv_text_no_account_create">无账号？新建之</string>
 </resources>
