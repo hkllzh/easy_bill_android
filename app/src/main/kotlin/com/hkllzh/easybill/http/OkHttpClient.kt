@@ -1,0 +1,53 @@
+package com.hkllzh.easybill.http
+
+import com.hkllzh.easybill.Constant
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+
+
+/**
+ * OkHttp 客户端
+ *
+ * @author lizheng on 2017/11/29
+ */
+object EasyBillHttpClient {
+    private var mClient: OkHttpClient? = null
+    private val mHttpLog = HttpLoggingInterceptor()
+
+    fun getClient(): OkHttpClient {
+        if (null != mClient) {
+            return mClient!!
+        }
+
+        mHttpLog.level = HttpLoggingInterceptor.Level.BODY
+
+        mClient = OkHttpClient.Builder()
+                .readTimeout(1, TimeUnit.MINUTES)
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .writeTimeout(1, TimeUnit.MINUTES)
+                .addInterceptor(mHttpLog)
+                .build()
+
+        return mClient!!
+    }
+
+    fun <T> getAPI(clazz: Class<T>): T? {
+        var api: T? = APICache.get(clazz.name)
+        if (api == null) {
+            synchronized(EasyBillHttpClient::class.java) {
+                if (api != null) return api
+                api = Retrofit.Builder().client(getClient())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                        .baseUrl(Constant.Net.BASE_URL)
+                        .build().create(clazz)
+                APICache.put(clazz.name, api)
+            }
+        }
+        return api
+    }
+}
