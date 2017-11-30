@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.hkllzh.easybill.R
 import com.hkllzh.easybill.base.EBBaseActivity
-import com.hkllzh.easybill.http.api.Login
+import com.hkllzh.easybill.http.api.LoginApiImpl
 import com.jakewharton.rxbinding2.view.RxView
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.act_login.*
@@ -54,7 +54,7 @@ class LoginActivity : EBBaseActivity() {
 
 
     private fun login() {
-        addDisposable(Login.login().subscribe {
+        addDisposable(LoginApiImpl.login().subscribe {
             Logger.d(it)
         })
     }
