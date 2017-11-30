@@ -36,19 +36,23 @@ object EasyBillHttpClient {
         return mClient!!
     }
 
-    fun <T> getAPI(clazz: Class<T>): T? {
+    fun <T> getAPI(clazz: Class<T>): T {
         var api = APICache[clazz.name] as T?
         if (api == null) {
             synchronized(EasyBillHttpClient::class.java) {
-                if (api != null) return api
-                api = Retrofit.Builder().client(getClient())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                        .baseUrl(Constant.Net.BASE_URL)
-                        .build().create(clazz)
-                APICache.put(clazz.name, api!!)
+                if (api != null) {
+                    return api!!
+                } else {
+                    api = Retrofit.Builder().client(getClient())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                            .baseUrl(Constant.Net.BASE_URL)
+                            .build().create(clazz)
+                    APICache.put(clazz.name, api!!)
+                }
+
             }
         }
-        return api
+        return api!!
     }
 }

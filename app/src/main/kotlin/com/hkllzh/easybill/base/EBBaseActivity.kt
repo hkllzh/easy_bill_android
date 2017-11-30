@@ -13,14 +13,11 @@ import io.reactivex.disposables.Disposable
 open class EBBaseActivity : BaseSupportActivity() {
     private val mCompositeDisposable: CompositeDisposable = CompositeDisposable()
 
+    fun addDisposable(action: () -> Disposable) = mCompositeDisposable.add(action.invoke())
 
-    fun addDisposable(action: () -> Disposable) {
-        mCompositeDisposable.add(action.invoke())
-    }
+    fun addDisposable(disposable: Disposable) = mCompositeDisposable.add(disposable)
 
-    private fun clearDisposable() {
-        mCompositeDisposable.clear()
-    }
+    private fun clearDisposable() = mCompositeDisposable.clear()
 
     override fun onDestroy() {
         super.onDestroy()

@@ -72,4 +72,6 @@ dependencies {
 
     implementation "me.yokeyword:fragmentation:${FRAGMENTATION_VERSION}"
 
+    implementation "com.orhanobut:logger:2.1.1"
+
 }

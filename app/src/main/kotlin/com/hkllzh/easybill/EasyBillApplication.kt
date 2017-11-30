@@ -5,6 +5,8 @@ import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.backends.okhttp3.OkHttpNetworkFetcher
 import com.facebook.imagepipeline.core.ImagePipelineConfig
 import com.hkllzh.easybill.http.EasyBillHttpClient
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
 
 /**
  * 项目Application
@@ -14,6 +16,8 @@ import com.hkllzh.easybill.http.EasyBillHttpClient
 class EasyBillApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+
+        Logger.addLogAdapter(AndroidLogAdapter())
 
         // 图片库初始化
         val pipelineConfig = ImagePipelineConfig.newBuilder(this)

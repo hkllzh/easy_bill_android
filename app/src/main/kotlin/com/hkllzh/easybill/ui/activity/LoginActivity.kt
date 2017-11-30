@@ -3,10 +3,11 @@ package com.hkllzh.easybill.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import com.hkllzh.easybill.R
 import com.hkllzh.easybill.base.EBBaseActivity
+import com.hkllzh.easybill.http.api.Login
 import com.jakewharton.rxbinding2.view.RxView
+import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.act_login.*
 import org.jetbrains.anko.toast
 import org.joda.time.DateTime
@@ -25,17 +26,37 @@ class LoginActivity : EBBaseActivity() {
 
         addDisposable {
             RxView.clicks(tvNoAccount).throttleFirst(2, TimeUnit.SECONDS).subscribe {
-                Log.e(TAG, DateTime.now().toString("yyyy-MM-dd_HH-mm-ss_SSS"))
+                Logger.e(DateTime.now().toString("yyyy-MM-dd_HH-mm-ss_SSS"))
                 toast("创建账号")
             }
+//            RxView.clicks(tvNoAccount).subscribe(
+//                    {
+//                        Log.e(TAG, "${this} onNext -> " + DateTime.now().toString("yyyy-MM-dd_HH-mm-ss_SSS"))
+//                    },
+//                    {
+//                        Log.e(TAG, "${this} onError -> " + DateTime.now().toString("yyyy-MM-dd_HH-mm-ss_SSS"))
+//                    },
+//                    {
+//                        Log.e(TAG, "${this} onComplete -> " + DateTime.now().toString("yyyy-MM-dd_HH-mm-ss_SSS"))
+//                    },
+//                    {
+//                        Log.e(TAG, "${this} onSubscribe -> " + DateTime.now().toString("yyyy-MM-dd_HH-mm-ss_SSS"))
+//                    }
+//            )
         }
 
         addDisposable {
             RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS).subscribe {
-                toast("登录")
+                login()
             }
         }
+    }
 
+
+    private fun login() {
+        addDisposable(Login.login().subscribe {
+            Logger.d(it)
+        })
     }
 
     companion object {
