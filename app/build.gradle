@@ -64,6 +64,10 @@ dependencies {
     // json 数据解析 Gson
     implementation "com.google.code.gson:gson:${GSON_VERSION}"
 
+    // RxJava
     implementation "io.reactivex.rxjava2:rxjava:${RXJAVA2_VERSION}"
+    implementation "io.reactivex.rxjava2:rxandroid:${RXJAVA2_RXANDROID_VERSION}"
+
+    implementation "me.yokeyword:fragmentation:${FRAGMENTATION_VERSION}"
 
 }

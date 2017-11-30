@@ -8,7 +8,7 @@ package com.hkllzh.easybill
 class Constant {
     class Net {
         companion object {
-            const val BASE_URL = "a"
+            const val BASE_URL = "http://121.196.217.69:8080"
         }
     }
 }
