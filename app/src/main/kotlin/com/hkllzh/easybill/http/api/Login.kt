@@ -12,7 +12,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 /**
- * 登录接口文件
+ * 登录接口
  *
  * @author lizheng on 2017/11/30
  */
@@ -21,6 +21,9 @@ interface LoginApi {
     fun login(@Body param: LoginReqParam): Observable<JsonObject>
 }
 
+/**
+ * 登录接口参数
+ */
 data class LoginReqParam(
         @SerializedName("username") // 自定义序列化名字
         val username: String,
@@ -29,16 +32,23 @@ data class LoginReqParam(
         @SerializedName("password")
         val password: String)
 
+/**
+ * 登录接口返回值
+ */
 data class LoginResBean(
         val userId: Int,
         val username: String,
         val token: String
 )
 
+/**
+ * 登录实现
+ */
 object LoginApiImpl : BaseApiImpl() {
-    fun login(): Observable<BaseResult<LoginResBean>> {
+    fun login(username: String, password: String): Observable<BaseResult<LoginResBean>> {
         return dataConversion({
-            EasyBillHttpClient.getAPI(LoginApi::class.java).login(LoginReqParam(username = "35", password = "p"))
+            EasyBillHttpClient.getAPI(LoginApi::class.java)
+                    .login(LoginReqParam(username = username, password = password))
         }, object : DataConversion<LoginResBean>() {
             override fun parseData4JsonObject(dataJson: JsonObject): BaseResult<LoginResBean> {
                 return try {

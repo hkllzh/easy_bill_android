@@ -32,35 +32,22 @@ class LoginActivity : EBBaseActivity() {
                 Logger.e(DateTime.now().toString("yyyy-MM-dd_HH-mm-ss_SSS"))
                 toast("创建账号")
             }
-//            RxView.clicks(tvNoAccount).subscribe(
-//                    {
-//                        Log.e(TAG, "${this} onNext -> " + DateTime.now().toString("yyyy-MM-dd_HH-mm-ss_SSS"))
-//                    },
-//                    {
-//                        Log.e(TAG, "${this} onError -> " + DateTime.now().toString("yyyy-MM-dd_HH-mm-ss_SSS"))
-//                    },
-//                    {
-//                        Log.e(TAG, "${this} onComplete -> " + DateTime.now().toString("yyyy-MM-dd_HH-mm-ss_SSS"))
-//                    },
-//                    {
-//                        Log.e(TAG, "${this} onSubscribe -> " + DateTime.now().toString("yyyy-MM-dd_HH-mm-ss_SSS"))
-//                    }
-//            )
         }
 
-        addDisposable {
-            RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS).subscribe {
-                login()
-            }
-        }
+        addDisposable(RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS).subscribe {
+            login()
+        })
+
     }
 
 
     private fun login() {
         addDisposable {
-            LoginApiImpl.login().commonSubscribe(Consumer { it: LoginResBean ->
-                Logger.d(it)
-            })
+            LoginApiImpl.login(etUsername.text.toString(), etPassword.text.toString())
+                    .commonSubscribe(Consumer { it: LoginResBean ->
+                        Logger.d(it)
+                        toast("登录成功")
+                    })
         }
     }
 
