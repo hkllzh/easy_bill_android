@@ -125,7 +125,7 @@ abstract class DataConversion<T> : Function<JsonElement, BaseResult<T>> {
     /**
      * 从JsonObject里面解析数据，99%的接口都需要重写此方法
      *
-     * @param dataJson 待解析数据 ，可能为空(null)
+     * @param dataJson 待解析数据
      * @return 解析后的数据
      */
     abstract fun parseData4JsonObject(dataJson: JsonObject): BaseResult<T>
