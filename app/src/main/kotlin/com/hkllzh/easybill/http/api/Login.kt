@@ -1,5 +1,6 @@
 package com.hkllzh.easybill.http.api
 
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import com.hkllzh.easybill.http.EasyBillHttpClient
@@ -40,7 +41,12 @@ object LoginApiImpl : BaseApiImpl() {
             EasyBillHttpClient.getAPI(LoginApi::class.java).login(LoginReqParam(username = "35", password = "p"))
         }, object : DataConversion<LoginResBean>() {
             override fun parseData4JsonObject(dataJson: JsonObject): BaseResult<LoginResBean> {
-                return BaseResult()
+                return try {
+                    BaseResult(Gson().fromJson(dataJson, LoginResBean::class.java))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    BaseResult(true, "数据解析失败\n${e.message}")
+                }
             }
         })
     }

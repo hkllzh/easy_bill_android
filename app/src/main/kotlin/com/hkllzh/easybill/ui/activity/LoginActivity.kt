@@ -52,26 +52,16 @@ class LoginActivity : EBBaseActivity() {
             RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS).subscribe {
                 login()
             }
-
-//            RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS)
-//                    .commonSubscribe(CommonObserver())
-
         }
     }
 
 
     private fun login() {
-
-        addDisposable(LoginApiImpl.login().subscribe {
-            Logger.d(it)
-        })
-
         addDisposable {
             LoginApiImpl.login().commonSubscribe(Consumer { it: LoginResBean ->
                 Logger.d(it)
             })
         }
-
     }
 
     companion object {

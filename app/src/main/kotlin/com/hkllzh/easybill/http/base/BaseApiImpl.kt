@@ -1,9 +1,7 @@
 package com.hkllzh.easybill.http.base
 
-import com.google.gson.JsonArray
-import com.google.gson.JsonNull
-import com.google.gson.JsonObject
-import com.google.gson.JsonPrimitive
+import com.google.gson.*
+import com.hkllzh.easybill.util.ToastAlone
 import com.orhanobut.logger.Logger
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -14,38 +12,74 @@ import io.reactivex.functions.Consumer
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 
+
+// 网络请求错误
+private const val KEY_HTTP_ERROR = "httpError"
+// 服务端返回数据错误
+private const val KEY_SERVER_DATA_ERROR = "serverDataError"
+// 数据处理错误
+private const val KEY_DATA_ERROR = "dataError"
+// 真实数据
+private const val KEY_DATA = "data"
+
 /**
  * 一个接口数据的通用处理类
  *
  * @author lizheng on 2017/11/30
  */
 open class BaseApiImpl {
+
     fun <T> dataConversion(action: () -> Observable<JsonObject>, dataConversion: DataConversion<T>): Observable<BaseResult<T>> {
         return action.invoke()
                 // 网络错误处理
                 .onErrorReturn { t: Throwable ->
-                    Logger.d(".onErrorReturn1")
+                    Logger.e("第一次错误处理 网络错误")
                     t.printStackTrace()
-                    Logger.e(t.message)
                     val j = JsonObject()
-                    j.addProperty("name", "lizheng")
+                    j.addProperty(KEY_HTTP_ERROR, t.message)
                     j
                 }
                 // 网络错误数据 或者 第一层数据解包
                 // 结果可能是 [] {} 1 null
                 .map {
-                    Logger.d(".map")
-                    Logger.d(it)
-                    val i = 0
-                    val j = 12 / i
-                    it
+
+                    Logger.d("第一层数据解包$it")
+
+                    val j = JsonObject()
+                    if (it.has(KEY_HTTP_ERROR)) {
+                        // 出现了网络错误
+                        j.addProperty(KEY_HTTP_ERROR, it.get(KEY_HTTP_ERROR).asString)
+                    } else {
+                        if (it.has("code")) {
+                            val code = it.get("code").asInt
+                            if (0 != code) {
+                                val errMsg = it.get("errMsg").asString
+                                j.addProperty(KEY_SERVER_DATA_ERROR, errMsg)
+                            } else {
+                                // 我们需要的数据
+                                if (it.has(KEY_DATA)) {
+                                    j.add(KEY_DATA, it.get(KEY_DATA))
+                                } else {
+                                    j.add(KEY_DATA, JsonNull.INSTANCE)
+                                }
+                            }
+                        } else {
+                            j.addProperty(KEY_SERVER_DATA_ERROR, "数据格式错误")
+                        }
+                    }
+
+                    if (j.has(KEY_DATA)) {
+                        j.get(KEY_DATA)
+                    } else {
+                        j
+                    }
                 }
                 // 上一个map处理数据错误
                 .onErrorReturn { t: Throwable ->
-                    Logger.d(".onErrorReturn2")
+                    Logger.e("第二次错误处理 数据错误")
                     t.printStackTrace()
                     val j = JsonObject()
-                    j.addProperty("map", "onErrorReturn")
+                    j.addProperty(KEY_DATA_ERROR, "数据处理错误")
                     j
                 }
                 // 转为真实想要的对象
@@ -54,22 +88,36 @@ open class BaseApiImpl {
     }
 }
 
-abstract class DataConversion<T> : Function<JsonObject, BaseResult<T>> {
-    override fun apply(jsonObject: JsonObject): BaseResult<T> {
+abstract class DataConversion<T> : Function<JsonElement, BaseResult<T>> {
+    override fun apply(jsonElement: JsonElement): BaseResult<T> {
+
+        Logger.d("第二层数据解包${jsonElement.toString()}")
 
         // 错误处理
+        if (jsonElement.isJsonObject) {
+            val jo = jsonElement.asJsonObject
+            if (jo.has(KEY_DATA_ERROR)) {
+                return BaseResult(isError = true, errorText = jo.get(KEY_DATA_ERROR).asString)
+            }
+            if (jo.has(KEY_SERVER_DATA_ERROR)) {
+                return BaseResult(isError = true, errorText = jo.get(KEY_SERVER_DATA_ERROR).asString)
+            }
+            if (jo.has(KEY_HTTP_ERROR)) {
+                return BaseResult(isError = true, errorText = jo.get(KEY_HTTP_ERROR).asString)
+            }
+        }
 
-        if (jsonObject.isJsonObject) {
-            return parseData4JsonObject(jsonObject)
+        if (jsonElement.isJsonObject) {
+            return parseData4JsonObject(jsonElement.asJsonObject)
         }
-        if (jsonObject.isJsonArray) {
-            return parseData4JsonArray(jsonObject.asJsonArray)
+        if (jsonElement.isJsonArray) {
+            return parseData4JsonArray(jsonElement.asJsonArray)
         }
-        if (jsonObject.isJsonPrimitive) {
-            return parseData4JsonPrimitive(jsonObject.asJsonPrimitive)
+        if (jsonElement.isJsonPrimitive) {
+            return parseData4JsonPrimitive(jsonElement.asJsonPrimitive)
         }
-        if (jsonObject.isJsonNull) {
-            return parseData4JsonNull(jsonObject.asJsonNull)
+        if (jsonElement.isJsonNull) {
+            return parseData4JsonNull(jsonElement.asJsonNull)
         }
         return BaseResult()
     }
@@ -115,6 +163,7 @@ class CommonObserver<T>() : Observer<BaseResult<T>> {
     override fun onNext(t: BaseResult<T>) {
         if (t.isError) {
             Logger.e(t.errorText)
+            ToastAlone.showShort(t.errorText)
         } else {
             _onNext.accept(t.t)
         }
@@ -130,13 +179,14 @@ class CommonObserver<T>() : Observer<BaseResult<T>> {
 
     override fun onError(e: Throwable) {
         Logger.e(e.message)
+        ToastAlone.showShort(e.message)
         _onError.accept(e)
     }
 
-    var _onNext = Consumer<T> { }
-    var _onError = Consumer<Throwable> {}
-    val _onComplete = Action {}
-    val _onSubscribe = Consumer<Disposable> {}
+    private var _onNext = Consumer<T> { }
+    private var _onError = Consumer<Throwable> {}
+    private val _onComplete = Action {}
+    private val _onSubscribe = Consumer<Disposable> {}
 
     constructor(onNext: Consumer<T>) : this() {
         this._onNext = onNext
