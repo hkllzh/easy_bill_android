@@ -3,9 +3,10 @@ package com.hkllzh.easybill.http.api
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import com.hkllzh.easybill.http.EasyBillHttpClient
+import com.hkllzh.easybill.http.base.BaseApiImpl
+import com.hkllzh.easybill.http.base.BaseResult
+import com.hkllzh.easybill.http.base.DataConversion
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -17,7 +18,6 @@ import retrofit2.http.POST
 interface LoginApi {
     @POST("/v1/user/login")
     fun login(@Body param: LoginReqParam): Observable<JsonObject>
-    // fun login(@Body param: HashMap<String, Any>): Observable<JsonObject>
 }
 
 data class LoginReqParam(
@@ -34,13 +34,14 @@ data class LoginResBean(
         val token: String
 )
 
-object LoginApiImpl {
-    fun login(): Observable<String> {
-        return EasyBillHttpClient.getAPI(LoginApi::class.java)
-                .login(LoginReqParam(username = "35", password = "p"))
-                .map {
-                    it.toString()
-                }
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+object LoginApiImpl : BaseApiImpl() {
+    fun login(): Observable<BaseResult<LoginResBean>> {
+        return dataConversion({
+            EasyBillHttpClient.getAPI(LoginApi::class.java).login(LoginReqParam(username = "35", password = "p"))
+        }, object : DataConversion<LoginResBean>() {
+            override fun parseData4JsonObject(dataJson: JsonObject): BaseResult<LoginResBean> {
+                return BaseResult()
+            }
+        })
     }
 }
