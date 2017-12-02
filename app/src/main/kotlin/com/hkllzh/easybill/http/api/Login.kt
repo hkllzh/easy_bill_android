@@ -8,18 +8,6 @@ import com.hkllzh.easybill.http.base.BaseApiImpl
 import com.hkllzh.easybill.http.base.BaseResult
 import com.hkllzh.easybill.http.base.DataConversion
 import io.reactivex.Observable
-import retrofit2.http.Body
-import retrofit2.http.POST
-
-/**
- * 登录接口
- *
- * @author lizheng on 2017/11/30
- */
-interface LoginApi {
-    @POST("/v1/user/login")
-    fun login(@Body param: LoginReqParam): Observable<JsonObject>
-}
 
 /**
  * 登录接口参数
@@ -47,8 +35,7 @@ data class LoginResBean(
 object LoginApiImpl : BaseApiImpl() {
     fun login(username: String, password: String): Observable<BaseResult<LoginResBean>> {
         return dataConversion({
-            EasyBillHttpClient.getAPI(LoginApi::class.java)
-                    .login(LoginReqParam(username = username, password = password))
+            EasyBillHttpClient.userApi.login(LoginReqParam(username = username, password = password))
         }, object : DataConversion<LoginResBean>() {
             override fun parseData4JsonObject(dataJson: JsonObject): BaseResult<LoginResBean> {
                 return try {

@@ -24,7 +24,7 @@ class EasyBillApplication : Application() {
 
         // 图片库初始化
         val pipelineConfig = ImagePipelineConfig.newBuilder(this)
-                .setNetworkFetcher(OkHttpNetworkFetcher(EasyBillHttpClient.getClient()))
+                .setNetworkFetcher(OkHttpNetworkFetcher(EasyBillHttpClient.okHttpClient))
         Fresco.initialize(this, pipelineConfig.build())
 
         Database.initialize(this)

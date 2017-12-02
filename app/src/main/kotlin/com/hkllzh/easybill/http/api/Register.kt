@@ -7,8 +7,6 @@ import com.hkllzh.easybill.http.base.BaseApiImpl
 import com.hkllzh.easybill.http.base.BaseResult
 import com.hkllzh.easybill.http.base.DataConversion
 import io.reactivex.Observable
-import retrofit2.http.Body
-import retrofit2.http.POST
 
 /**
  * 注册 接口文件
@@ -17,18 +15,16 @@ import retrofit2.http.POST
  */
 
 /**
- * 注册接口
+ * 注册接口参数
  */
-interface RegisterApi {
-    @POST("/v1/user/register")
-    fun register(@Body param: RegisterReqParam): Observable<JsonObject>
-}
-
 data class RegisterReqParam(
         val username: String,
         val password: String
 )
 
+/**
+ * 注册接口返回值
+ */
 data class RegisterResBean(
         val userId: Int,
         val username: String,
@@ -38,8 +34,7 @@ data class RegisterResBean(
 object RegisterApiImpl : BaseApiImpl() {
     fun register(username: String, password: String): Observable<BaseResult<RegisterResBean>> {
         return dataConversion({
-            EasyBillHttpClient.getAPI(RegisterApi::class.java)
-                    .register(RegisterReqParam(username, password))
+            EasyBillHttpClient.userApi.register(RegisterReqParam(username, password))
         }, object : DataConversion<RegisterResBean>() {
             override fun parseData4JsonObject(dataJson: JsonObject): BaseResult<RegisterResBean> {
                 return try {

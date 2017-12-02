@@ -49,15 +49,18 @@ class LoginActivity : EBBaseActivity() {
                     .commonSubscribe(Consumer { it: LoginResBean ->
                         Logger.d(it)
                         toast("登录成功")
-                        doAsync {
-                            Database.saveUser(User(it.userId, it.username, it.token))
-                            val ls = Database.getUserData()?.getAll()
-                            Logger.d(ls)
-                            uiThread {
-                                Logger.d(ls)
-                                MainActivity.start(this.weakRef.get()!!)
-                            }
-                        }
+                        MainActivity.start(this)
+//                        doAsync {
+//                            Database.saveUser(User(it.userId, it.username, it.token))
+//                            val ls = Database.getUserData()?.getAll()
+//                            Logger.d(ls)
+//                            uiThread {
+//                                Logger.d(ls)
+//                                MainActivity.start(this.weakRef.get()!!)
+//                            }
+//                        }
+
+
                     })
         }
     }
