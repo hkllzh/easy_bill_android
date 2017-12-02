@@ -9,4 +9,10 @@
     <string name="btn_text_login">登录</string>
     <string name="btn_text_register">注册</string>
     <string name="tv_text_no_account_create">无账号？新建之</string>
+    <string name="title_activity_main">@string/app_name</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

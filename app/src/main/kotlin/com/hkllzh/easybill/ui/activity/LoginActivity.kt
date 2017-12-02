@@ -45,6 +45,7 @@ class LoginActivity : EBBaseActivity() {
                     .commonSubscribe(Consumer { it: LoginResBean ->
                         Logger.d(it)
                         toast("登录成功")
+                        MainActivity.start(this)
                     })
         }
     }

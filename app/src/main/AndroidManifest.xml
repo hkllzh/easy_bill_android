@@ -24,8 +24,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 注册页面 -->
         <activity android:name=".ui.activity.RegisterActivity" />
 
+        <!-- 核心主页 -->
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:label="@string/title_activity_main" />
     </application>
 
 </manifest>
