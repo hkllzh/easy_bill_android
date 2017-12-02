@@ -67,7 +67,7 @@ class MainActivity : EBBaseActivity(), NavigationView.OnNavigationItemSelectedLi
     }
 
     companion object {
-        private val TAG = "MainActivity"
+        private val TAG = "SplashActivity"
         fun start(context: Context) {
             val starter = Intent(context, MainActivity::class.java)
             context.startActivity(starter)

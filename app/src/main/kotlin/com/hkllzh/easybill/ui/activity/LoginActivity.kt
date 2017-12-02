@@ -56,7 +56,7 @@ class LoginActivity : EBBaseActivity() {
 //                            Logger.d(ls)
 //                            uiThread {
 //                                Logger.d(ls)
-//                                MainActivity.start(this.weakRef.get()!!)
+//                                SplashActivity.start(this.weakRef.get()!!)
 //                            }
 //                        }
 
