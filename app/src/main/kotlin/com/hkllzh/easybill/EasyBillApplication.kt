@@ -5,7 +5,7 @@ import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.backends.okhttp3.OkHttpNetworkFetcher
 import com.facebook.imagepipeline.core.ImagePipelineConfig
 import com.hkllzh.easybill.db.Database
-import com.hkllzh.easybill.http.EasyBillHttpClient
+import com.hkllzh.easybill.http.EasyBillHttpServer
 import com.hkllzh.easybill.util.ToastAlone
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -24,7 +24,7 @@ class EasyBillApplication : Application() {
 
         // 图片库初始化
         val pipelineConfig = ImagePipelineConfig.newBuilder(this)
-                .setNetworkFetcher(OkHttpNetworkFetcher(EasyBillHttpClient.okHttpClient))
+                .setNetworkFetcher(OkHttpNetworkFetcher(EasyBillHttpServer.okHttpClient))
         Fresco.initialize(this, pipelineConfig.build())
 
         Database.initialize(this)

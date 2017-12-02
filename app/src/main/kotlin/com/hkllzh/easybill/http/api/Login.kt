@@ -3,7 +3,7 @@ package com.hkllzh.easybill.http.api
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
-import com.hkllzh.easybill.http.EasyBillHttpClient
+import com.hkllzh.easybill.http.EasyBillHttpServer
 import com.hkllzh.easybill.http.base.BaseApiImpl
 import com.hkllzh.easybill.http.base.BaseResult
 import com.hkllzh.easybill.http.base.DataConversion
@@ -35,7 +35,7 @@ data class LoginResBean(
 object LoginApiImpl : BaseApiImpl() {
     fun login(username: String, password: String): Observable<BaseResult<LoginResBean>> {
         return dataConversion({
-            EasyBillHttpClient.userApi.login(LoginReqParam(username = username, password = password))
+            EasyBillHttpServer.userServer.login(LoginReqParam(username = username, password = password))
         }, object : DataConversion<LoginResBean>() {
             override fun parseData4JsonObject(dataJson: JsonObject): BaseResult<LoginResBean> {
                 return try {

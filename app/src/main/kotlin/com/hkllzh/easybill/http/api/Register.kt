@@ -2,7 +2,7 @@ package com.hkllzh.easybill.http.api
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.hkllzh.easybill.http.EasyBillHttpClient
+import com.hkllzh.easybill.http.EasyBillHttpServer
 import com.hkllzh.easybill.http.base.BaseApiImpl
 import com.hkllzh.easybill.http.base.BaseResult
 import com.hkllzh.easybill.http.base.DataConversion
@@ -34,7 +34,7 @@ data class RegisterResBean(
 object RegisterApiImpl : BaseApiImpl() {
     fun register(username: String, password: String): Observable<BaseResult<RegisterResBean>> {
         return dataConversion({
-            EasyBillHttpClient.userApi.register(RegisterReqParam(username, password))
+            EasyBillHttpServer.userServer.register(RegisterReqParam(username, password))
         }, object : DataConversion<RegisterResBean>() {
             override fun parseData4JsonObject(dataJson: JsonObject): BaseResult<RegisterResBean> {
                 return try {

@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
  *
  * @author lizheng on 2017/11/29
  */
-object EasyBillHttpClient {
+object EasyBillHttpServer {
 
     val okHttpClient: OkHttpClient by lazy {
         val mHttpLog = HttpLoggingInterceptor()
@@ -30,7 +30,7 @@ object EasyBillHttpClient {
                 .build()
     }
 
-    val userApi: UserApi get() = retrofit.create(UserApi::class.java)
+    val userServer: UserApi get() = retrofit.create(UserApi::class.java)
 
     private val retrofit = Retrofit.Builder().client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
