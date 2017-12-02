@@ -26,6 +26,7 @@ class MainActivity : EBBaseActivity(), NavigationView.OnNavigationItemSelectedLi
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+        toolbar.title = "hello"
     }
 
     override fun onBackPressed() {

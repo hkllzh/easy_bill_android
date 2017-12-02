@@ -24,7 +24,7 @@ object EasyBillHttpServer {
 
         OkHttpClient.Builder()
                 .readTimeout(1, TimeUnit.MINUTES)
-                .connectTimeout(1, TimeUnit.SECONDS)
+                .connectTimeout(1, TimeUnit.MINUTES)
                 .writeTimeout(1, TimeUnit.MINUTES)
                 .addInterceptor(mHttpLog)
                 .build()
