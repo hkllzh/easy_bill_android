@@ -13,7 +13,6 @@ import com.orhanobut.logger.Logger
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.act_login.*
 import org.jetbrains.anko.toast
-import org.joda.time.DateTime
 import java.util.concurrent.TimeUnit
 
 /**
@@ -29,8 +28,7 @@ class LoginActivity : EBBaseActivity() {
 
         addDisposable {
             RxView.clicks(tvNoAccount).throttleFirst(2, TimeUnit.SECONDS).subscribe {
-                Logger.e(DateTime.now().toString("yyyy-MM-dd_HH-mm-ss_SSS"))
-                toast("创建账号")
+                RegisterActivity.start(this)
             }
         }
 
