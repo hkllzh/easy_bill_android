@@ -178,6 +178,7 @@ class CommonObserver<T>() : Observer<BaseResult<T>> {
     }
 
     override fun onError(e: Throwable) {
+        e.printStackTrace()
         Logger.e(e.message)
         ToastAlone.showShort(e.message)
         _onError.accept(e)
