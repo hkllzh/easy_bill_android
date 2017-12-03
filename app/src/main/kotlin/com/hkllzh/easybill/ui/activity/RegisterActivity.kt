@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.hkllzh.easybill.R
 import com.hkllzh.easybill.base.EBBaseActivity
-import com.hkllzh.easybill.http.api.RegisterApiImpl
+import com.hkllzh.easybill.http.api.UserApiImpl
 import com.hkllzh.easybill.http.base.commonSubscribe
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.functions.Consumer
@@ -48,7 +48,7 @@ class RegisterActivity : EBBaseActivity() {
 
 
         addDisposable {
-            RegisterApiImpl.register("", "").commonSubscribe(Consumer {
+            UserApiImpl.register("", "").commonSubscribe(Consumer {
 
             })
         }

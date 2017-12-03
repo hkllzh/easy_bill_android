@@ -5,18 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import com.hkllzh.easybill.R
 import com.hkllzh.easybill.base.EBBaseActivity
-import com.hkllzh.easybill.db.Database
-import com.hkllzh.easybill.db.User
-import com.hkllzh.easybill.http.api.LoginApiImpl
 import com.hkllzh.easybill.http.api.LoginResBean
+import com.hkllzh.easybill.http.api.UserApiImpl
 import com.hkllzh.easybill.http.base.commonSubscribe
 import com.jakewharton.rxbinding2.view.RxView
 import com.orhanobut.logger.Logger
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.act_login.*
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
 import java.util.concurrent.TimeUnit
 
 /**
@@ -45,7 +41,7 @@ class LoginActivity : EBBaseActivity() {
 
     private fun login() {
         addDisposable {
-            LoginApiImpl.login(etUsername.text.toString(), etPassword.text.toString())
+            UserApiImpl.login(etUsername.text.toString(), etPassword.text.toString())
                     .commonSubscribe(Consumer { it: LoginResBean ->
                         Logger.d(it)
                         toast("登录成功")
