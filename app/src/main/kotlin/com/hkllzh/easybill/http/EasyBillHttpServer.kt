@@ -27,10 +27,11 @@ object EasyBillHttpServer {
                 .connectTimeout(1, TimeUnit.MINUTES)
                 .writeTimeout(1, TimeUnit.MINUTES)
                 .addInterceptor(mHttpLog)
+                .addInterceptor(HeaderInterceptor)
                 .build()
     }
 
-    val userServer: UserApi get() = retrofit.create(UserApi::class.java)
+    val userApi: UserApi get() = retrofit.create(UserApi::class.java)
 
     private val retrofit = Retrofit.Builder().client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())

@@ -8,6 +8,7 @@ import com.hkllzh.easybill.base.EBBaseActivity
 import com.hkllzh.easybill.http.api.LoginResBean
 import com.hkllzh.easybill.http.api.UserApiImpl
 import com.hkllzh.easybill.http.base.commonSubscribe
+import com.hkllzh.easybill.util.delegate.Preference
 import com.jakewharton.rxbinding2.view.RxView
 import com.orhanobut.logger.Logger
 import io.reactivex.functions.Consumer
@@ -21,6 +22,10 @@ import java.util.concurrent.TimeUnit
  * @author lizheng 2017-11-30
  */
 class LoginActivity : EBBaseActivity() {
+
+    private var userId by Preference("userId", "")
+    private var token by Preference("userToken", "")
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +50,9 @@ class LoginActivity : EBBaseActivity() {
                     .commonSubscribe(Consumer { it: LoginResBean ->
                         Logger.d(it)
                         toast("登录成功")
+                        userId = it.userId.toString()
+                        token = it.token
+
                         MainActivity.start(this)
 //                        doAsync {
 //                            Database.saveUser(User(it.userId, it.username, it.token))
