@@ -54,6 +54,7 @@ class LoginActivity : EBBaseActivity() {
                         token = it.token
 
                         MainActivity.start(this)
+                        finish()
 //                        doAsync {
 //                            Database.saveUser(User(it.userId, it.username, it.token))
 //                            val ls = Database.getUserData()?.getAll()

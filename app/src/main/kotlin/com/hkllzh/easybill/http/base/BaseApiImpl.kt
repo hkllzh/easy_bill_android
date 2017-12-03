@@ -1,6 +1,8 @@
 package com.hkllzh.easybill.http.base
 
 import com.google.gson.*
+import com.hkllzh.easybill.event.ReLoggedIn
+import com.hkllzh.easybill.event.RxBus
 import com.hkllzh.easybill.util.ToastAlone
 import com.orhanobut.logger.Logger
 import io.reactivex.Observable
@@ -19,8 +21,14 @@ private const val KEY_HTTP_ERROR = "httpError"
 private const val KEY_SERVER_DATA_ERROR = "serverDataError"
 // 数据处理错误
 private const val KEY_DATA_ERROR = "dataError"
+private const val KEY_RE_LOGGED_IN = "reLoggedIn"
+private const val KEY_RE_LOGGED_IN_MSG = "需要重新登录"
+
+
+private const val JSON_KEY_CODE = "code"
+private const val JSON_KEY_ERR_MSG = "errMsg"
 // 真实数据
-private const val KEY_DATA = "data"
+private const val JSON_KEY_DATA = "data"
 
 /**
  * 一个接口数据的通用处理类
@@ -50,17 +58,25 @@ open class BaseApiImpl {
                         // 出现了网络错误
                         j.addProperty(KEY_HTTP_ERROR, it.get(KEY_HTTP_ERROR).asString)
                     } else {
-                        if (it.has("code")) {
-                            val code = it.get("code").asInt
-                            if (0 != code) {
-                                val errMsg = it.get("errMsg").asString
-                                j.addProperty(KEY_SERVER_DATA_ERROR, errMsg)
-                            } else {
-                                // 我们需要的数据
-                                if (it.has(KEY_DATA)) {
-                                    j.add(KEY_DATA, it.get(KEY_DATA))
-                                } else {
-                                    j.add(KEY_DATA, JsonNull.INSTANCE)
+                        if (it.has(JSON_KEY_CODE)) {
+                            val code = it.get(JSON_KEY_CODE).asInt
+
+                            when (code) {
+                                0 -> {
+                                    // 我们需要的数据
+                                    if (it.has(JSON_KEY_DATA)) {
+                                        j.add(JSON_KEY_DATA, it.get(JSON_KEY_DATA))
+                                    } else {
+                                        j.add(JSON_KEY_DATA, JsonNull.INSTANCE)
+                                    }
+                                }
+                                10001 -> {
+                                    // 验证错误，需要重新登录
+                                    j.addProperty(KEY_RE_LOGGED_IN, KEY_RE_LOGGED_IN_MSG)
+                                }
+                                else -> {
+                                    val errMsg = it.get(JSON_KEY_ERR_MSG).asString
+                                    j.addProperty(KEY_SERVER_DATA_ERROR, errMsg)
                                 }
                             }
                         } else {
@@ -68,8 +84,8 @@ open class BaseApiImpl {
                         }
                     }
 
-                    if (j.has(KEY_DATA)) {
-                        j.get(KEY_DATA)
+                    if (j.has(JSON_KEY_DATA)) {
+                        j.get(JSON_KEY_DATA)
                     } else {
                         j
                     }
@@ -104,6 +120,9 @@ abstract class DataConversion<T> : Function<JsonElement, BaseResult<T>> {
             }
             if (jo.has(KEY_HTTP_ERROR)) {
                 return BaseResult(isError = true, errorText = jo.get(KEY_HTTP_ERROR).asString)
+            }
+            if (jo.has(KEY_RE_LOGGED_IN)) {
+                return BaseResult(isError = true, errorText = jo.get(KEY_RE_LOGGED_IN).asString)
             }
         }
 
@@ -163,6 +182,9 @@ class CommonObserver<T>() : Observer<BaseResult<T>> {
     override fun onNext(t: BaseResult<T>) {
         if (t.isError) {
             Logger.e(t.errorText)
+            if (t.errorText == KEY_RE_LOGGED_IN_MSG) {
+                RxBus.post(ReLoggedIn())
+            }
             ToastAlone.showShort(t.errorText)
         } else {
             _onNext.accept(t.t)

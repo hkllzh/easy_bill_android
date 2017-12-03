@@ -26,8 +26,8 @@ object EasyBillHttpServer {
                 .readTimeout(1, TimeUnit.MINUTES)
                 .connectTimeout(1, TimeUnit.MINUTES)
                 .writeTimeout(1, TimeUnit.MINUTES)
-                .addInterceptor(mHttpLog)
                 .addInterceptor(HeaderInterceptor)
+                .addInterceptor(mHttpLog)
                 .build()
     }
 

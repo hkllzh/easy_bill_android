@@ -9,6 +9,8 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
 import com.hkllzh.easybill.R
 import com.hkllzh.easybill.base.EBBaseActivity
+import com.hkllzh.easybill.event.ReLoggedIn
+import com.hkllzh.easybill.event.RxBus
 import kotlinx.android.synthetic.main.act_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import org.jetbrains.anko.toast
@@ -27,6 +29,11 @@ class MainActivity : EBBaseActivity(), NavigationView.OnNavigationItemSelectedLi
 
         nav_view.setNavigationItemSelectedListener(this)
         toolbar.title = "hello"
+
+
+        addDisposable(RxBus.toObservable(ReLoggedIn::class.java).subscribe {
+
+        })
     }
 
     override fun onBackPressed() {

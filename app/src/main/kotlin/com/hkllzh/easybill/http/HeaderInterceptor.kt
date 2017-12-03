@@ -23,7 +23,7 @@ object HeaderInterceptor : Interceptor {
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .addHeader("Accept-Charset", "utf-8")
-                .addHeader("Cookie", "$userId,$token")
+                .addHeader("Token", "$userId,$token")
         return chain.proceed(builder.build())
     }
 }
