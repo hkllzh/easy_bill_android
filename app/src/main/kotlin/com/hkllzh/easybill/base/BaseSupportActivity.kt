@@ -204,7 +204,7 @@ open class BaseSupportActivity : AppCompatActivity(), ISupportActivity {
     /**
      * 获取栈内的fragment对象
      */
-    fun <T : ISupportFragment> findFragment(fragmentClass: Class<T>): T {
+    fun <T : ISupportFragment> findFragment(fragmentClass: Class<T>): T? {
         return SupportHelper.findFragment(supportFragmentManager, fragmentClass)
     }
 }

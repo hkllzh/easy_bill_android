@@ -11,6 +11,7 @@ import com.hkllzh.easybill.R
 import com.hkllzh.easybill.base.EBBaseActivity
 import com.hkllzh.easybill.event.ReLoggedIn
 import com.hkllzh.easybill.event.RxBus
+import com.hkllzh.easybill.ui.fragment.BillListFragment
 import kotlinx.android.synthetic.main.act_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import org.jetbrains.anko.toast
@@ -34,6 +35,12 @@ class MainActivity : EBBaseActivity(), NavigationView.OnNavigationItemSelectedLi
         addDisposable(RxBus.toObservable(ReLoggedIn::class.java).subscribe {
 
         })
+
+
+        // load main Fragment
+        if (null == findFragment(BillListFragment::class.java)) {
+            loadRootFragment(R.id.flContent, BillListFragment.newInstance())
+        }
     }
 
     override fun onBackPressed() {

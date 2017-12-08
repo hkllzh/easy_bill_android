@@ -16,4 +16,6 @@
 
     <string name="action_settings">Settings</string>
     <string name="tv_text_my_email">li396858359@163.com</string>
+    <string name="text_earning">收入</string>
+    <string name="text_expense">支出</string>
 </resources>
