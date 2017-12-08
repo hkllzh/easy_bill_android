@@ -6,9 +6,10 @@ import android.os.Bundle
 import com.hkllzh.easybill.R
 import com.hkllzh.easybill.base.EBBaseActivity
 import com.hkllzh.easybill.http.api.UserApiImpl
-import com.hkllzh.easybill.http.base.commonSubscribe
+import com.hkllzh.easybill.http.base.customSubscribe
+import com.hkllzh.easybill.util.delegate.Preference
 import com.jakewharton.rxbinding2.view.RxView
-import io.reactivex.functions.Consumer
+import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.act_register.*
 import me.yokeyword.fragmentation.SupportHelper.hideSoftInput
 
@@ -18,6 +19,10 @@ import me.yokeyword.fragmentation.SupportHelper.hideSoftInput
  * @author lizheng on 2017/12/1
  */
 class RegisterActivity : EBBaseActivity() {
+
+    private var userId by Preference("userId", "")
+    private var token by Preference("userToken", "")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_register)
@@ -48,9 +53,14 @@ class RegisterActivity : EBBaseActivity() {
 
 
         addDisposable {
-            UserApiImpl.register("", "").commonSubscribe(Consumer {
+            UserApiImpl.register(username, password).customSubscribe {
+                Logger.i(it.toString())
+                userId = it.userId.toString()
+                token = it.token
 
-            })
+                MainActivity.start(this)
+                finish()
+            }
         }
     }
 

@@ -178,7 +178,14 @@ abstract class DataConversion<T> : Function<JsonElement, BaseResult<T>> {
 }
 
 
-class CommonObserver<T>() : Observer<BaseResult<T>> {
+class CommonObserver<T>(
+        private val onNext: Consumer<T>,
+        private val onError: Consumer<Throwable>,
+        private val onComplete: Action,
+        private val onSubscribe: Consumer<Disposable>) : Observer<BaseResult<T>> {
+
+    constructor(onNext: Consumer<T>) : this(onNext, Consumer<Throwable> { }, Action { }, Consumer<Disposable> { })
+
     override fun onNext(t: BaseResult<T>) {
         if (t.isError) {
             Logger.e(t.errorText)
@@ -187,48 +194,44 @@ class CommonObserver<T>() : Observer<BaseResult<T>> {
             }
             ToastAlone.showShort(t.errorText)
         } else {
-            _onNext.accept(t.t)
+            onNext.accept(t.t)
         }
     }
 
     override fun onComplete() {
-        _onComplete.run()
+        onComplete.run()
     }
 
     override fun onSubscribe(d: Disposable) {
-        _onSubscribe.accept(d)
+        onSubscribe.accept(d)
     }
 
     override fun onError(e: Throwable) {
         e.printStackTrace()
         Logger.e(e.message)
         ToastAlone.showShort(e.message)
-        _onError.accept(e)
+        onError.accept(e)
     }
 
-    private var _onNext = Consumer<T> { }
-    private var _onError = Consumer<Throwable> {}
-    private val _onComplete = Action {}
-    private val _onSubscribe = Consumer<Disposable> {}
-
-    constructor(onNext: Consumer<T>) : this() {
-        this._onNext = onNext
-    }
-
-    constructor(onNext: Consumer<T>, onError: Consumer<Throwable>) : this() {
-        this._onNext = onNext
-        this._onError = onError
-    }
 }
 
-
-fun <T> Observable<BaseResult<T>>.commonSubscribe(onNext: Consumer<T>): Disposable {
-    val co = CommonObserver<T>(onNext)
+fun <T> Observable<BaseResult<T>>.customSubscribe(
+        onNext: (t: T) -> Unit = {},
+        onError: (t: Throwable) -> Unit = {},
+        onComplete: Action = Action { },
+        onSubscribe: Consumer<Disposable> = Consumer { }
+): Disposable {
+    val co = CommonObserver<T>(
+            onNext = Consumer { onNext.invoke(it) },
+            onError = Consumer { onError.invoke(it) },
+            onComplete = Action { onComplete.run() },
+            onSubscribe = Consumer { onSubscribe.accept(it) }
+    )
     return this.subscribe({ co.onNext(it) }, { co.onError(it) }, { co.onComplete() }, { co.onSubscribe(it) })
 }
 
-fun <T> Observable<BaseResult<T>>.commonSubscribe(onNext: Consumer<T>, onError: Consumer<Throwable>): Disposable {
-    val co = CommonObserver<T>(onNext, onError)
+fun <T> Observable<BaseResult<T>>.customSubscribe(onNext: (t: T) -> Unit = {}): Disposable {
+    val co = CommonObserver<T>(onNext = Consumer { onNext.invoke(it) })
     return this.subscribe({ co.onNext(it) }, { co.onError(it) }, { co.onComplete() }, { co.onSubscribe(it) })
 }
 
@@ -240,8 +243,7 @@ class BaseResult<T> {
     // 真实数据
     var t: T? = null
 
-    constructor() {
-    }
+    constructor()
 
     constructor(t: T) {
         this.t = t

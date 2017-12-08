@@ -1,5 +1,6 @@
 package com.hkllzh.easybill.http
 
+import android.util.Log
 import com.hkllzh.easybill.Constant
 import com.hkllzh.easybill.http.api.UserApi
 import okhttp3.OkHttpClient
@@ -18,7 +19,9 @@ import java.util.concurrent.TimeUnit
 object EasyBillHttpServer {
 
     val okHttpClient: OkHttpClient by lazy {
-        val mHttpLog = HttpLoggingInterceptor()
+        val mHttpLog = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger {
+            Log.i("OkHttp", it)
+        })
 
         mHttpLog.level = HttpLoggingInterceptor.Level.BODY
 

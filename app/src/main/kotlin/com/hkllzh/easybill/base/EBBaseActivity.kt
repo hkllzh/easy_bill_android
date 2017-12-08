@@ -21,6 +21,7 @@ open class EBBaseActivity : BaseSupportActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        mCompositeDisposable.dispose()
         clearDisposable()
     }
 }

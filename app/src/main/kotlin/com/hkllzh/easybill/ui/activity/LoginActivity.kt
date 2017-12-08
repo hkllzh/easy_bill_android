@@ -5,13 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import com.hkllzh.easybill.R
 import com.hkllzh.easybill.base.EBBaseActivity
-import com.hkllzh.easybill.http.api.LoginResBean
 import com.hkllzh.easybill.http.api.UserApiImpl
-import com.hkllzh.easybill.http.base.commonSubscribe
+import com.hkllzh.easybill.http.base.customSubscribe
 import com.hkllzh.easybill.util.delegate.Preference
 import com.jakewharton.rxbinding2.view.RxView
-import com.orhanobut.logger.Logger
-import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.act_login.*
 import org.jetbrains.anko.toast
 import java.util.concurrent.TimeUnit
@@ -46,27 +43,32 @@ class LoginActivity : EBBaseActivity() {
 
     private fun login() {
         addDisposable {
-            UserApiImpl.login(etUsername.text.toString(), etPassword.text.toString())
-                    .commonSubscribe(Consumer { it: LoginResBean ->
-                        Logger.d(it)
+            //            UserApiImpl.login(etUsername.text.toString(), etPassword.text.toString())
+//                    .commonSubscribe(Consumer { it: LoginResBean ->
+//                        Logger.d(it)
+//
+////                        doAsync {
+////                            Database.saveUser(User(it.userId, it.username, it.token))
+////                            val ls = Database.getUserData()?.getAll()
+////                            Logger.d(ls)
+////                            uiThread {
+////                                Logger.d(ls)
+////                                SplashActivity.start(this.weakRef.get()!!)
+////                            }
+////                        }
+//
+//
+//                    })
+            UserApiImpl
+                    .login(etUsername.text.toString(), etPassword.text.toString())
+                    .customSubscribe {
                         toast("登录成功")
                         userId = it.userId.toString()
                         token = it.token
 
                         MainActivity.start(this)
                         finish()
-//                        doAsync {
-//                            Database.saveUser(User(it.userId, it.username, it.token))
-//                            val ls = Database.getUserData()?.getAll()
-//                            Logger.d(ls)
-//                            uiThread {
-//                                Logger.d(ls)
-//                                SplashActivity.start(this.weakRef.get()!!)
-//                            }
-//                        }
-
-
-                    })
+                    }
         }
     }
 

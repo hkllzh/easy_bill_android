@@ -5,10 +5,9 @@ import com.hkllzh.easybill.base.EBBaseActivity
 import com.hkllzh.easybill.event.ReLoggedIn
 import com.hkllzh.easybill.event.RxBus
 import com.hkllzh.easybill.http.api.UserApiImpl
-import com.hkllzh.easybill.http.base.commonSubscribe
+import com.hkllzh.easybill.http.base.customSubscribe
 import com.hkllzh.easybill.ui.activity.LoginActivity
 import com.hkllzh.easybill.ui.activity.MainActivity
-import io.reactivex.functions.Consumer
 
 /**
  * 主页
@@ -27,10 +26,10 @@ class SplashActivity : EBBaseActivity() {
         })
 
         addDisposable {
-            UserApiImpl.checkLogin().commonSubscribe(Consumer {
+            UserApiImpl.checkLogin().customSubscribe {
                 MainActivity.start(this)
                 finish()
-            })
+            }
         }
 
     }
