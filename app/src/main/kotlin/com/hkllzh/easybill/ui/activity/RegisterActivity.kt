@@ -34,7 +34,7 @@ class RegisterActivity : EBBaseActivity() {
         }
 
         addDisposable {
-            RxView.clicks(btnRetigser).subscribe {
+            RxView.clicks(btnRegister).subscribe {
                 register()
             }
         }
