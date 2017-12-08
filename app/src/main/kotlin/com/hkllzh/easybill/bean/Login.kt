@@ -1,4 +1,4 @@
-package com.hkllzh.easybill.http.api
+package com.hkllzh.easybill.bean
 
 import com.google.gson.annotations.SerializedName
 

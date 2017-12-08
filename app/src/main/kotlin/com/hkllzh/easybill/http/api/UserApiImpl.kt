@@ -2,6 +2,10 @@ package com.hkllzh.easybill.http.api
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.hkllzh.easybill.bean.LoginReqParam
+import com.hkllzh.easybill.bean.LoginResBean
+import com.hkllzh.easybill.bean.RegisterReqParam
+import com.hkllzh.easybill.bean.RegisterResBean
 import com.hkllzh.easybill.http.EasyBillHttpServer
 import com.hkllzh.easybill.http.base.BaseApiImpl
 import com.hkllzh.easybill.http.base.BaseResult

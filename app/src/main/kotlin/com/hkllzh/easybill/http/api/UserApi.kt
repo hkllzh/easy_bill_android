@@ -1,6 +1,8 @@
 package com.hkllzh.easybill.http.api
 
 import com.google.gson.JsonObject
+import com.hkllzh.easybill.bean.LoginReqParam
+import com.hkllzh.easybill.bean.RegisterReqParam
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.POST

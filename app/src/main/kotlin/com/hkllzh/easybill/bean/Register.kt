@@ -1,4 +1,4 @@
-package com.hkllzh.easybill.http.api
+package com.hkllzh.easybill.bean
 
 /**
  * 注册 接口文件

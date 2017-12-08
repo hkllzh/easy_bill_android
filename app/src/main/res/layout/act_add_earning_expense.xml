@@ -10,9 +10,6 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:theme="@style/AppTheme.AppBarOverlay"
-        app:navigationIcon="@drawable/ic_menu_share"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:subtitle="收入 / 支出"
         app:title="增加账单" />
 
 </android.support.constraint.ConstraintLayout>
