@@ -27,12 +27,20 @@
             android:screenOrientation="portrait" />
 
         <!-- 注册页面 -->
-        <activity android:name=".ui.activity.RegisterActivity" />
+        <activity
+            android:name=".ui.activity.RegisterActivity"
+            android:screenOrientation="portrait" />
 
         <!-- 核心主页 -->
         <activity
             android:name=".ui.activity.MainActivity"
-            android:label="@string/title_activity_main" />
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait" />
+
+        <!-- 增加收入支出页面 -->
+        <activity
+            android:name=".ui.activity.AddEarningExpenseActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

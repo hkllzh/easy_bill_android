@@ -24,7 +24,7 @@ open class EBBaseActivity : BaseSupportActivity() {
         clearDisposable()
     }
 
-    protected fun addDisposable(disposable: Disposable) = mCompositeDisposable.add(disposable)
+    fun addDisposable(disposable: Disposable) = mCompositeDisposable.add(disposable)
 
     private fun clearDisposable() = mCompositeDisposable.dispose()
 }

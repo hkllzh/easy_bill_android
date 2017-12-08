@@ -13,17 +13,16 @@ import java.util.concurrent.TimeUnit
  */
 // 延时执行
 fun EBBaseActivity.delayed(time: Long, block: () -> Unit, error: (t: Throwable) -> Unit = {}) {
-    addDisposable {
-        Observable.timer(time, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ block.invoke() }, { error.invoke(it) })
-    }
+    addDisposable(Observable.timer(time, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ block.invoke() }, { error.invoke(it) })
+    )
 }
 
 // 延时执行
 fun EBBaseFragment.delayed(time: Long, block: () -> Unit, error: (t: Throwable) -> Unit = {}) {
-    val act = activity
-    if (act is EBBaseActivity) {
-        act.delayed(time, block, error)
-    }
+    addDisposable(Observable.timer(time, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ block.invoke() }, { error.invoke(it) })
+    )
 }
