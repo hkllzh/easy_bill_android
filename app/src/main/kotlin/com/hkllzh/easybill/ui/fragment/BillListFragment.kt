@@ -33,7 +33,6 @@ class BillListFragment : EBBaseFragment() {
         addDisposable(RxView.clicks(btnExpense).subscribe {
             ToastAlone.showLong("支出 /(ㄒoㄒ)/~~")
         })
-
     }
 
     companion object {

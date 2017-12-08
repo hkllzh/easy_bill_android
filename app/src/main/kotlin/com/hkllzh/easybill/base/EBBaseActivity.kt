@@ -1,6 +1,7 @@
 package com.hkllzh.easybill.base
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -11,17 +12,19 @@ import io.reactivex.disposables.Disposable
  * @author lizheng on 2017/11/30
  */
 open class EBBaseActivity : BaseSupportActivity() {
-    private val mCompositeDisposable: CompositeDisposable = CompositeDisposable()
+    private lateinit var mCompositeDisposable: CompositeDisposable
 
-    fun addDisposable(action: () -> Disposable) = mCompositeDisposable.add(action.invoke())
-
-    fun addDisposable(disposable: Disposable) = mCompositeDisposable.add(disposable)
-
-    private fun clearDisposable() = mCompositeDisposable.clear()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mCompositeDisposable = CompositeDisposable()
+    }
 
     override fun onDestroy() {
         super.onDestroy()
-        mCompositeDisposable.dispose()
         clearDisposable()
     }
+
+    protected fun addDisposable(disposable: Disposable) = mCompositeDisposable.add(disposable)
+
+    private fun clearDisposable() = mCompositeDisposable.dispose()
 }

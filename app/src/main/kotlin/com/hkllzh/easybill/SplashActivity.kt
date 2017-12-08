@@ -25,12 +25,10 @@ class SplashActivity : EBBaseActivity() {
             finish()
         })
 
-        addDisposable {
-            UserApiImpl.checkLogin().customSubscribe {
-                MainActivity.start(this)
-                finish()
-            }
-        }
+        addDisposable(UserApiImpl.checkLogin().customSubscribe {
+            MainActivity.start(this)
+            finish()
+        })
 
     }
 }

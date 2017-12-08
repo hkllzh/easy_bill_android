@@ -28,11 +28,9 @@ class LoginActivity : EBBaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_login)
 
-        addDisposable {
-            RxView.clicks(tvNoAccount).throttleFirst(2, TimeUnit.SECONDS).subscribe {
-                RegisterActivity.start(this)
-            }
-        }
+        addDisposable(RxView.clicks(tvNoAccount).throttleFirst(2, TimeUnit.SECONDS).subscribe {
+            RegisterActivity.start(this)
+        })
 
         addDisposable(RxView.clicks(btnLogin).throttleFirst(2, TimeUnit.SECONDS).subscribe {
             login()
@@ -42,34 +40,15 @@ class LoginActivity : EBBaseActivity() {
 
 
     private fun login() {
-        addDisposable {
-            //            UserApiImpl.login(etUsername.text.toString(), etPassword.text.toString())
-//                    .commonSubscribe(Consumer { it: LoginResBean ->
-//                        Logger.d(it)
-//
-////                        doAsync {
-////                            Database.saveUser(User(it.userId, it.username, it.token))
-////                            val ls = Database.getUserData()?.getAll()
-////                            Logger.d(ls)
-////                            uiThread {
-////                                Logger.d(ls)
-////                                SplashActivity.start(this.weakRef.get()!!)
-////                            }
-////                        }
-//
-//
-//                    })
-            UserApiImpl
-                    .login(etUsername.text.toString(), etPassword.text.toString())
-                    .customSubscribe {
-                        toast("登录成功")
-                        userId = it.userId.toString()
-                        token = it.token
+        addDisposable(UserApiImpl.login(etUsername.text.toString(), etPassword.text.toString()).customSubscribe {
+            toast("登录成功")
+            userId = it.userId.toString()
+            token = it.token
 
-                        MainActivity.start(this)
-                        finish()
-                    }
-        }
+            MainActivity.start(this)
+            finish()
+        })
+
     }
 
     companion object {

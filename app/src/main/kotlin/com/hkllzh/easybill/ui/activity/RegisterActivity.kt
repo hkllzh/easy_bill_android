@@ -27,17 +27,13 @@ class RegisterActivity : EBBaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_register)
 
-        addDisposable {
-            RxView.clicks(root).subscribe {
-                hideSoftInput(root)
-            }
-        }
+        addDisposable(RxView.clicks(root).subscribe {
+            hideSoftInput(root)
+        })
 
-        addDisposable {
-            RxView.clicks(btnRegister).subscribe {
-                register()
-            }
-        }
+        addDisposable(RxView.clicks(btnRegister).subscribe {
+            register()
+        })
     }
 
     private fun register() {
@@ -52,16 +48,14 @@ class RegisterActivity : EBBaseActivity() {
         }
 
 
-        addDisposable {
-            UserApiImpl.register(username, password).customSubscribe {
-                Logger.i(it.toString())
-                userId = it.userId.toString()
-                token = it.token
+        addDisposable(UserApiImpl.register(username, password).customSubscribe {
+            Logger.i(it.toString())
+            userId = it.userId.toString()
+            token = it.token
 
-                MainActivity.start(this)
-                finish()
-            }
-        }
+            MainActivity.start(this)
+            finish()
+        })
     }
 
     companion object {
